@@ -9,5 +9,7 @@ namespace LeaveManagementSystem.Web.Data
             : base(options)
         {
         }
+        //Create a representation of a set entities of the Datatype LeaveType 
+        public DbSet<LeaveType> LeaveTypes { get; set; }
     }
 }
