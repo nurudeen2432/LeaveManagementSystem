@@ -1,4 +1,5 @@
-﻿@model LeaveManagementSystem.Web.Data.LeaveType
+﻿@model LeaveManagementSystem.Web.Models.LeaveTypes.LeaveTypeCreateVM
+
 
 @{
     ViewData["Title"] = "Create Leave Type";
@@ -31,6 +32,8 @@
             </div>
 
             <br />
+
+          @*   <input type="hidden" name="Id"/> *@
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
