@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using static LeaveManagementSystem.Web.Data.LeaveType;
 
 namespace LeaveManagementSystem.Web.Data;
 
-public class LeaveType
+public partial class LeaveType 
 {
     //Based on the Name of the property Id Efcore determines the Primary Key of the Leavetype Entity.
 
@@ -12,9 +13,6 @@ public class LeaveType
     public string Name { get; set; } = default!;
 
     public int NumberOfDays { get; set; }
-
-
-
 
 
 }

@@ -3,11 +3,11 @@ using LeaveManagementSystem.Web.Data;
 using LeaveManagementSystem.Web.Models.LeaveTypes;
 using Microsoft.EntityFrameworkCore;
 
-namespace LeaveManagementSystem.Web.Services;
+namespace LeaveManagementSystem.Web.Services.LeaveTypes;
 
 public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : ILeaveTypeService
 {
-   
+
 
     public async Task<List<LeaveTypeReadOnlyVM>> GetAll()
     {

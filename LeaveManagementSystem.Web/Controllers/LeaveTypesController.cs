@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using LeaveManagementSystem.Web.Data;
 using LeaveManagementSystem.Web.Models.LeaveTypes;
 using AutoMapper;
-using LeaveManagementSystem.Web.Services;
+using LeaveManagementSystem.Web.Services.LeaveTypes;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
+    [Authorize(Roles ="Administrator")]
     public class LeaveTypesController(ILeaveTypeService leaveTypeService) : Controller
     {
        

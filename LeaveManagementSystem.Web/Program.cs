@@ -1,5 +1,7 @@
 using LeaveManagementSystem.Web.Data;
-using LeaveManagementSystem.Web.Services;
+using LeaveManagementSystem.Web.Services.Email;
+using LeaveManagementSystem.Web.Services.LeaveAllocations;
+using LeaveManagementSystem.Web.Services.LeaveTypes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -17,11 +19,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // -> we want to Map the LeaveType DataModel to the LeaveTypeReadOnlyVM class
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+
+builder.Services.AddScoped<ILeaveAllocationService , LeaveAllocationService>();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
