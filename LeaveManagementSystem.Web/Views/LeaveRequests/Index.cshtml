@@ -1,0 +1,116 @@
+﻿@using static LeaveManagementSystem.Web.Services.LeaveRequests.LeaveRequestsService
+@model IEnumerable<LeaveRequestReadOnlyVM>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Leave Request List";
+}
+<p>
+    <h2>Reviewing Your Leave Requests</h2>
+    <!-- Go the asp-action Create once clicked -->
+    <a asp-action="Create" class="btn btn-primary">Request Leave</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveTypes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfDays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveRequestStatus)
+            </th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var className = string.Empty;
+            if (item.LeaveRequestStatus == LeaveRequestStatuses.Pending)
+            {
+                className = "warning";
+            }
+            else if (item.LeaveRequestStatus == LeaveRequestStatuses.Approved)
+            {
+                className = "success";
+            }
+            else if (item.LeaveRequestStatus == LeaveRequestStatuses.Canceled)
+            {
+                className = "dark";
+            }
+            else if (item.LeaveRequestStatus == LeaveRequestStatuses.Declined)
+            {
+                className = "danger";
+            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveTypes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDays)
+                </td>
+                <td>
+                    <span class="badge rounded-pill bg-@className">@item.LeaveRequestStatus.ToString()</span>
+                </td>
+                <td>
+                    @if (item.LeaveRequestStatus == LeaveRequestStatuses.Pending)
+                    {
+                       <button data-id="@item.Id" class="btn btn-danger cancelBtn" >Cancel</button>
+                    }
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-action="Cancel" id="cancelForm">
+    <input type="hidden" name="Id" id="leaveRequestId"/>
+
+</form>
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(function () {
+        $('.cancelBtn').click(function (e) {
+            e.preventDefault(); // Prevent the default action of the button
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure you want to cancel this leave request?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, cancel it!",
+                cancelButtonText: "No, keep it"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var btn = $(this); // Reference the button clicked
+                    var id = btn.data("id"); // Get the ID from data-id attribute
+
+                    $('#leaveRequestId').val(id); // Set the hidden input's value
+                    $('#cancelForm').submit();  // Submit the form
+                }
+            });
+        });
+    });
+    </script>
+}

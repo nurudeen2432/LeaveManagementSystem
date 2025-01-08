@@ -8,4 +8,7 @@ public interface ILeaveAllocationService
 
     Task<EmployeeAllocationVM> GetEmployeeAllocations(string? userid);
     Task<List<EmployeeListVM>> GetEmployees();
+    Task<LeaveAllocationEditVM> GetEmployeeAllocation(Guid allocationId);
+    Task EditAllocation(LeaveAllocationEditVM allocationEditVM);
+    Task<LeaveAllocation> GetCurrentAllocation(Guid leaveTypeId, string employeeId);
 }

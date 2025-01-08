@@ -1,13 +1,31 @@
-﻿
+﻿@using LeaveManagementSystem.Web.Common
+
 @model EmployeeAllocationVM
 
 @{
 
     ViewData["Title"] = "View Allocations";
 
+    var isAdmin = User.IsInRole(Roles.Administrator);
+
+    var isEmployee = User.IsInRole(Roles.Employee);
+
+    string message = isAdmin ? "There are no allocations" : "You have no allocations please contact admin";
 }
 <h1>View Allocations for @Model.FirstName @Model.LastName</h1>
+<br/>
 
+@if (isAdmin)
+{
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    <br/>
+}
+
+@if (isEmployee)
+{
+    <a asp-controller="LeaveRequests" asp-action="Index" class="btn btn-primary">View Request History</a>
+    <br/>
+}
 <div>
 
     <hr />
@@ -40,6 +58,28 @@
     </dl>
 </div>
 <hr/>
+@if(isAdmin && !Model.IsCompletedAllocation)
+{
+    <div class="alert alert-warning">
+        <p>User is missing some leave allocations.</p>
+    </div>
+
+   @*  <form asp-action="AllocateLeave">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input type="submit" value="Allocate Missing Leave Types" asp-action="AllocateLeave" asp-route-userId="@Model.Id" class="btn btn-danger" />
+    
+    </form> *@
+
+    <form asp-action="AllocateLeave" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Allocate Missing Leave Types" class="btn btn-danger" />
+        @Html.AntiForgeryToken()
+    </form>
+
+@*     <a class="btn btn-warning" asp-action="AllocateLeave" asp-route-userId="@Model.Id">Allocate Leave</a>
+ *@    <br>
+    <br/>
+}
 @if (Model.LeaveAllocations.Any())
 {
     <div class="card" style="width: 100%;">
@@ -71,7 +111,13 @@
 
                         </div>
                         <div class="col">
-                            <a asp-controller="LeaveRequest" asp-action="Create" class="btn btn-success">Request Leave</a>
+                            @if (isAdmin)
+                            {
+                                <a class="btn btn-warning" asp-action="EditAllocation" asp-route-id="@allocation.Id">Edit Allocation </a>
+                                <br/>
+                                <br/>
+                            }
+                            <a asp-controller="LeaveRequests" asp-action="Create" asp-route-leaveTypeId="@allocation.LeaveType.Id"  class="btn btn-success">Request Leave</a>
 
                         </div>
                     </div>
@@ -86,6 +132,6 @@
 else
 {
     <div class="alert alert-warning" role="alert">
-       <h2>You have no allocations please contact admin</h2>
+       <h2>@message</h2>
     </div>
 }
