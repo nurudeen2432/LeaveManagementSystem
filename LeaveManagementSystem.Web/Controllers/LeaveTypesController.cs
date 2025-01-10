@@ -1,34 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using LeaveManagementSystem.Application.Models.LeaveTypes;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.EntityFrameworkCore;
-using LeaveManagementSystem.Web.Data;
-using LeaveManagementSystem.Web.Models.LeaveTypes;
-using AutoMapper;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
-    [Authorize(Roles ="Administrator")]
-    public class LeaveTypesController(ILeaveTypeService leaveTypeService) : Controller
+    [Authorize(Roles = "Administrator")]
+    public class LeaveTypesController(ILeaveTypeService _leaveTypeService) : Controller
     {
-       
-        private readonly ILeaveTypeService _leaveTypeService = leaveTypeService;
+
+        
         private const string NameExistValidationMessage = "This leave type already exist in the database";
 
         //DepencyInjection
-     
+
         // GET: LeaveTypes
         public async Task<IActionResult> Index()
         {
 
 
 
-            var viewData = await  _leaveTypeService.GetAll();
-      
+            var viewData = await _leaveTypeService.GetAll();
+
             return View(viewData);
         }
 
@@ -63,7 +55,7 @@ namespace LeaveManagementSystem.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LeaveTypeCreateVM leaveTypeCreate)
         {
-          
+
             if (await _leaveTypeService.CheckIfLeaveTypeNameExist(leaveTypeCreate.Name))
             {
                 ModelState.AddModelError(nameof(leaveTypeCreate.Name), NameExistValidationMessage);
@@ -72,7 +64,7 @@ namespace LeaveManagementSystem.Web.Controllers
             if (ModelState.IsValid)
             {
 
-               
+
                 await _leaveTypeService.Create(leaveTypeCreate);
 
                 return RedirectToAction(nameof(Index));
@@ -80,7 +72,7 @@ namespace LeaveManagementSystem.Web.Controllers
             return View(leaveTypeCreate);
         }
 
-     
+
         // GET: LeaveTypes/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -95,7 +87,7 @@ namespace LeaveManagementSystem.Web.Controllers
                 return NotFound();
             }
 
-           
+
             return View(leaveType);
         }
 
@@ -140,7 +132,7 @@ namespace LeaveManagementSystem.Web.Controllers
             return View(leaveTypeEdit);
         }
 
-   
+
 
         // GET: LeaveTypes/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
@@ -164,11 +156,11 @@ namespace LeaveManagementSystem.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-           await _leaveTypeService.Remove(id);
+            await _leaveTypeService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 
-      
+
 
     }
 }

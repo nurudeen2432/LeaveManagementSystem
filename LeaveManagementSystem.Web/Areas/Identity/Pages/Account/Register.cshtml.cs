@@ -3,7 +3,7 @@
 #nullable disable
 
 
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
@@ -89,7 +89,7 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
             [Required]
             public string RoleName { get; set; }
 
-  
+
 
 
 
@@ -145,7 +145,7 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
 
                     var userId = await _userManager.GetUserIdAsync(user);
 
-                    await  _leaveAllocationService.allocationLeave(userId);
+                    await _leaveAllocationService.allocationLeave(userId);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

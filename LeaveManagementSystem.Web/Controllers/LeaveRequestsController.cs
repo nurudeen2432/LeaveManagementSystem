@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using LeaveManagementSystem.Web.Models.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using Microsoft.AspNetCore.Mvc;
+﻿using LeaveManagementSystem.Application.Models.LeaveRequests;
+using LeaveManagementSystem.Application.Services.LeaveRequests;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
@@ -30,12 +23,12 @@ namespace LeaveManagementSystem.Web.Controllers
 
         //Employee Create requests
 
-        
+
         public async Task<IActionResult> Create(Guid? leaveTypeId)
         {
             var leaveTypes = await _leaveTypeService.GetAll();
 
-            var leaveTypesList = new SelectList(leaveTypes,"Id", "Name", leaveTypeId );
+            var leaveTypesList = new SelectList(leaveTypes, "Id", "Name", leaveTypeId);
 
             var model = new LeaveRequestCreateVM
             {
@@ -53,7 +46,7 @@ namespace LeaveManagementSystem.Web.Controllers
         [Route("LeaveRequests/Create")]
         public async Task<IActionResult> Create(LeaveRequestCreateVM model)
         {
-            if(await _leaveRequestsService.RequestLeaveExceedAllocation(model))
+            if (await _leaveRequestsService.RequestLeaveExceedAllocation(model))
             {
                 ModelState.AddModelError(string.Empty, "You have exceed your allocation");
                 ModelState.AddModelError(nameof(model.EndDate), "The Number of Days Requested is Invalid");
@@ -67,7 +60,7 @@ namespace LeaveManagementSystem.Web.Controllers
             }
             var leaveTypes = await _leaveTypeService.GetAll();
 
-            model.LeaveTypes= new SelectList(leaveTypes, "Id", "Name");
+            model.LeaveTypes = new SelectList(leaveTypes, "Id", "Name");
 
 
             return View(model);
@@ -84,17 +77,17 @@ namespace LeaveManagementSystem.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
         //Admin/supervisor review request
-        [Authorize(Policy ="AdminSupervisorOnly")]
+        [Authorize(Policy = "AdminSupervisorOnly")]
         public async Task<IActionResult> ListRequests()
         {
-           var model = await _leaveRequestsService.AdminGetAllLeaveRequest();
+            var model = await _leaveRequestsService.AdminGetAllLeaveRequest();
 
             return View(model);
         }
 
         public async Task<IActionResult> Review(Guid id)
         {
-           var model = await _leaveRequestsService.GetLeaveRequestForReview(id);
+            var model = await _leaveRequestsService.GetLeaveRequestForReview(id);
             return View(model);
         }
 
@@ -104,7 +97,7 @@ namespace LeaveManagementSystem.Web.Controllers
         {
             await _leaveRequestsService.ReviewLeaveRequest(id, approved);
             return RedirectToAction(nameof(ListRequests));
-            
+
         }
 
     }

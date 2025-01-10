@@ -1,14 +1,13 @@
-using LeaveManagementSystem.Web.Common;
-using LeaveManagementSystem.Web.Data;
-using LeaveManagementSystem.Web.Services.Email;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using LeaveManagementSystem.Web.Services.Periods;
-using LeaveManagementSystem.Web.Services.Users;
-using Microsoft.AspNetCore.Identity;
+using LeaveManagementSystem.Application.Services.Email;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
+using LeaveManagementSystem.Application.Services.Periods;
+using LeaveManagementSystem.Application.Services.Users;
+using LeaveManagementSystem.Application.Services.LeaveRequests;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,15 +33,20 @@ builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<IPeriodsServices, PeriodsService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddScoped<ILeaveAllocationService , LeaveAllocationService>();
+//register automapper to the D.I container by referring to the IserviceCollection
 
-builder.Services.AddScoped<ILeaveRequestsService, LeaveRequestsService>();
+
+ApplicationServiceRegistrations.AddApplicationServices(builder.Services);
+
+DataServiceRegistration.AddDataServices(builder.Services, builder.Configuration);
+
 
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminSupervisorOnly", policy => {
-    policy.RequireRole(Roles.Administrator, Roles.Supervisor);
+    .AddPolicy("AdminSupervisorOnly", policy =>
+    {
+        policy.RequireRole(Roles.Administrator, Roles.Supervisor);
 
-});
+    });
 
 builder.Services.AddHttpContextAccessor();
 

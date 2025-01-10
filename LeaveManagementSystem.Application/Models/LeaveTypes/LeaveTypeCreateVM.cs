@@ -1,0 +1,15 @@
+﻿namespace LeaveManagementSystem.Application.Models.LeaveTypes
+{
+    public class LeaveTypeCreateVM : BaseLeaveTypeVM
+    {
+        [Required]
+        [Length(4, 150, ErrorMessage = "You have violated the length requirement")]
+        public string Name { get; set; } = default!;
+
+        [Required]
+
+        [Range(1, 90)]
+        [Display(Name = "Maximum Allocation of Days")]
+        public int NumberOfDays { get; set; } = default!;
+    }
+}

@@ -1,8 +1,6 @@
-﻿using LeaveManagementSystem.Web.Common;
-using LeaveManagementSystem.Web.Models.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using Microsoft.AspNetCore.Mvc;
+﻿using LeaveManagementSystem.Application.Models.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
@@ -14,7 +12,7 @@ namespace LeaveManagementSystem.Web.Controllers
         ) : Controller
     {
 
-        [Authorize(Roles= Roles.Administrator)]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<IActionResult> Index()
         {
 
@@ -29,8 +27,8 @@ namespace LeaveManagementSystem.Web.Controllers
         public async Task<IActionResult> AllocateLeave(string id)
         {
 
-             await _leaveAllocationService.allocationLeave(id);
-            return RedirectToAction(nameof(Details), new { userid = id});
+            await _leaveAllocationService.allocationLeave(id);
+            return RedirectToAction(nameof(Details), new { userid = id });
         }
 
         public async Task<IActionResult> EditAllocation(string? id)
@@ -54,11 +52,11 @@ namespace LeaveManagementSystem.Web.Controllers
 
         public async Task<IActionResult> EditAllocation(LeaveAllocationEditVM allocationEditVM)
         {
-            if(await _leaveTypeService.DaysExceedMaximum(allocationEditVM.LeaveType.Id, allocationEditVM.Days))
+            if (await _leaveTypeService.DaysExceedMaximum(allocationEditVM.LeaveType.Id, allocationEditVM.Days))
             {
                 ModelState.AddModelError("Days", "The allocation exceeds the maximum leave type value");
             }
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 await _leaveAllocationService.EditAllocation(allocationEditVM);
 
@@ -73,7 +71,7 @@ namespace LeaveManagementSystem.Web.Controllers
             allocation.Days = days;
 
             return View(allocationEditVM);
-          
+
 
         }
 
@@ -85,6 +83,6 @@ namespace LeaveManagementSystem.Web.Controllers
             return View(employeeVm);
         }
 
-   
+
     }
 }
