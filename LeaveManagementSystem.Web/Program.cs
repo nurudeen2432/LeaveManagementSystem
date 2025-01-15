@@ -6,6 +6,7 @@ using LeaveManagementSystem.Application.Services.Users;
 using LeaveManagementSystem.Application.Services.LeaveRequests;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Serilog;
 
 
 
@@ -32,6 +33,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<IPeriodsServices, PeriodsService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Host.UseSerilog(
+    (ctx, config) =>
+    {
+    config.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration);
+        
+    }
+
+
+
+);
 
 //register automapper to the D.I container by referring to the IserviceCollection
 

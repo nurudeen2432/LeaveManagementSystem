@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LeaveManagementSystem.Web.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class LeaveTypesController(ILeaveTypeService _leaveTypeService) : Controller
+    public class LeaveTypesController(ILeaveTypeService _leaveTypeService, ILogger<LeaveTypesController> _logger) : Controller
     {
 
         
@@ -18,7 +18,7 @@ namespace LeaveManagementSystem.Web.Controllers
         {
 
 
-
+            _logger.LogInformation("Loading Leave Types");
             var viewData = await _leaveTypeService.GetAll();
 
             return View(viewData);

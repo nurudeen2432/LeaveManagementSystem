@@ -51,7 +51,14 @@ public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : 
 
     public async Task Edit(LeaveTypeEditVM model)
     {
+      
+            var leaveType = _mapper.Map<LeaveType>(model);
 
+            _context.Update(leaveType);
+
+            await _context.SaveChangesAsync();
+        
+       
     }
 
     public async Task Create(LeaveTypeCreateVM model)
