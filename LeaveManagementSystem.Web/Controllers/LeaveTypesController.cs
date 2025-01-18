@@ -69,6 +69,8 @@ namespace LeaveManagementSystem.Web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+            _logger.LogWarning("Leave Type attempt failed due to Invalidity");
+
             return View(leaveTypeCreate);
         }
 
